@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_DB=${PROJECT_DB_NAME}
+      - POSTGRES_PASSWORD=${PROJECT_DB_PASSWORD}
+      - POSTGRES_USER=${PROJECT_DB_USER}
+    ports:
+      - '5432:5432'
+    networks:
+      - project-network
+
+networks:
+  project-network:
+    driver: bridge
