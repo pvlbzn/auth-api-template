@@ -52,7 +52,7 @@ class AuthService:
         return encoded_jwt
 
     @staticmethod
-    def verify_token(token: str) -> DecryptedToken:
+    def decrypt_token(token: str) -> DecryptedToken:
         data = jwt.decode(
             token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM]
         )

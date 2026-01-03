@@ -26,11 +26,11 @@ async def get_auth(
             detail="Authorization header is required",
         )
 
-    token = authorization.replace("Bearer ", "")
+    raw_token = authorization.replace("Bearer ", "")
 
     try:
-        decrypted_token = auth_service.verify_token(token)
-        user = await user_service.get_by_email(email=decrypted_token.email)
+        token = auth_service.decrypt_token(raw_token)
+        user = await user_service.get_by_email(email=token.email)
 
         return user
 
