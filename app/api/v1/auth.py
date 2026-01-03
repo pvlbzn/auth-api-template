@@ -8,6 +8,7 @@ from starlette.responses import RedirectResponse
 
 from app.api.dependencies import get_auth_service, get_user_service, get_user
 from app.config import settings
+from app.schema.user import UserDTO
 from app.services.auth import AuthService
 from app.services.user import UserService
 
@@ -94,11 +95,5 @@ async def auth_callback(
 @router.get("/user")
 def get_current_user(
     user=Depends(get_user),
-):
-    return {
-        "id": str(user.id),
-        "email": user.email,
-        "name": user.name,
-        "provider": user.provider,
-        "avatar_url": user.avatar_url,
-    }
+) -> UserDTO:
+    return user
