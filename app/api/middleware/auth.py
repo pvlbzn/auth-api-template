@@ -6,9 +6,9 @@ from fastapi.params import Header, Depends
 from starlette import status
 from starlette.requests import Request
 
-from app.api.dependencies import get_user_service
-from app.config import settings
-from app.schema.user import UserDTO, JWTUserDTO
+from app.api.dependencies import get_user_service, get_auth_service
+from app.schema.user import UserDTO
+from app.services.auth import AuthService
 from app.services.user import UserService
 
 log = logging.getLogger(__name__)
@@ -17,6 +17,7 @@ log = logging.getLogger(__name__)
 async def get_auth(
     request: Request,
     authorization: str = Header(None),
+    auth_service: AuthService = Depends(get_auth_service),
     user_service: UserService = Depends(get_user_service),
 ) -> UserDTO:
     if authorization is None:
@@ -28,9 +29,8 @@ async def get_auth(
     token = authorization.replace("Bearer ", "")
 
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        jwt_data = JWTUserDTO.model_validate(payload)
-        user = await user_service.get_by_email(email=jwt_data.email)
+        decrypted_token = auth_service.verify_token(token)
+        user = await user_service.get_by_email(email=decrypted_token.email)
 
         return user
 

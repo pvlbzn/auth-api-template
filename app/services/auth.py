@@ -4,8 +4,19 @@ from typing import Optional
 
 import jwt
 from authlib.integrations.starlette_client import OAuth
+from pydantic import BaseModel
 
 from app.config import settings
+
+
+class DecryptedToken(BaseModel):
+    sub: str
+    email: str
+    provider: str
+    exp: int
+
+    class Config:
+        from_attributes = True
 
 
 class AuthService:
@@ -22,7 +33,7 @@ class AuthService:
             server_metadata_url=settings.GOOGLE_METADATA_URL,
             client_kwargs={"scope": ["openid email profile"]},
         )
-        self.log.info("Initialized Google OAuth")
+        self.log.debug("Google OAuth initialized")
 
     @staticmethod
     def create_access_token(
@@ -41,10 +52,8 @@ class AuthService:
         return encoded_jwt
 
     @staticmethod
-    def verify_token(token: str):
-        try:
-            return jwt.decode(
-                token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM]
-            )
-        except jwt.PyJWTError:
-            return None
+    def verify_token(token: str) -> DecryptedToken:
+        data = jwt.decode(
+            token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM]
+        )
+        return DecryptedToken.model_validate(data)
