@@ -1,7 +1,9 @@
+import logging
+
 from authlib.integrations.starlette_client import OAuth
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from app.infra.db.conn import get_db
@@ -11,9 +13,10 @@ from app.services.auth import AuthService
 from app.services.user import UserService
 
 security = HTTPBearer()
+log = logging.getLogger(__name__)
 
 
-def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
+def get_user_repository(db: AsyncSession = Depends(get_db)) -> UserRepository:
     return UserRepository(db=db)
 
 
@@ -34,6 +37,7 @@ async def get_user(
 ) -> UserDTO:
     token = credentials.credentials
     payload = auth_service.verify_token(token)
+
     invalid_auth_credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid authentication credentials",
@@ -52,6 +56,7 @@ async def get_user(
 
     user = await user_service.get_by_id(user_id)
     if user is None:
+        log.error(f"user {user_id} not found while token is valid")
         raise user_not_found_exception
 
     return user
