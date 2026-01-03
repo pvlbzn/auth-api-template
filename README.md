@@ -1,3 +1,23 @@
+# Setup
+
+Copy `.env.example` and provide your credentials in `.env`.
+
+```shell
+cp .env.example .env
+```
+
+Initialize docker image with database.
+
+```shell
+docker compose up -d
+```
+
+Apply migrations.
+
+```shell
+uv run db-migrate
+```
+
 # Run
 
 ```shell
