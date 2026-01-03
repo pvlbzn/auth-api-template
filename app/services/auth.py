@@ -4,14 +4,12 @@ from typing import Optional
 
 import jwt
 from authlib.integrations.starlette_client import OAuth
-from pydantic import BaseModel, ConfigDict
 
 from app.config import settings
+from app.schema.base import BaseDTO
 
 
-class DecryptedToken(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
+class DecryptedToken(BaseDTO):
     sub: str
     email: str
     provider: str

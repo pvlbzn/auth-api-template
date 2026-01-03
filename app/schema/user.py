@@ -1,11 +1,10 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+
+from app.schema.base import BaseDTO
 
 
-class UserDTO(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
+class UserDTO(BaseDTO):
     id: UUID
     email: str
     name: str
@@ -14,16 +13,12 @@ class UserDTO(BaseModel):
     avatar_url: str
 
 
-class AuthUserDTO(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
+class AuthUserDTO(BaseDTO):
     email: str
     name: str
     provider_id: UUID
 
 
-class JWTUserDTO(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
+class JWTUserDTO(BaseDTO):
     email: str
     name: str
