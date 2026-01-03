@@ -12,16 +12,21 @@ Initialize docker image with database.
 docker compose up -d
 ```
 
+Load dependencies and sync the project.
+
+```shell
+uv sync
+```
+
 Apply migrations.
 
 ```shell
 uv run db-migrate
 ```
 
-# Run
+Run the app.
 
 ```shell
-uv sync
 uv run dev
 ```
 
