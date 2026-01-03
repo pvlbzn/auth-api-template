@@ -4,6 +4,7 @@ import jwt
 from fastapi import HTTPException
 from fastapi.params import Header, Depends
 from starlette import status
+from starlette.requests import Request
 
 from app.api.dependencies import get_user_service
 from app.config import settings
@@ -14,6 +15,7 @@ log = logging.getLogger(__name__)
 
 
 async def get_auth(
+    request: Request,
     authorization: str = Header(None),
     user_service: UserService = Depends(get_user_service),
 ) -> UserDTO:
@@ -39,7 +41,7 @@ async def get_auth(
 
     except jwt.InvalidTokenError as e:
         # Could be suspicious
-        log.warning(f"invalid token attempt: {e}")
+        log.warning(f"invalid token attempt IP {request.client.host}: {e}")
         raise HTTPException(status_code=401, detail="invalid token")
 
     except Exception as e:
