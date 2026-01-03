@@ -17,7 +17,9 @@ class Base(DeclarativeBase):
 
 
 class BaseMixin:
-    id: Mapped[int] = mapped_column(
+    __abstract__ = True
+
+    id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         default=uuid.uuid4,
         primary_key=True,
