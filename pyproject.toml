@@ -7,13 +7,17 @@ requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.17.2",
     "asyncpg>=0.31.0",
+    "authlib>=1.6.6",
     "dotenv>=0.9.9",
     "fastapi[standard]>=0.122.0",
+    "gotrue>=2.12.4",
+    "itsdangerous>=2.2.0",
     "psycopg2>=2.9.11",
     "pydantic>=2.12.3",
     "pydantic-settings>=2.11.0",
     "ruff>=0.14.3",
     "sqlalchemy[asyncio]>=2.0.44",
+    "supabase>=2.27.0",
     "uv-build>=0.9.6",
     "uvicorn>=0.38.0",
 ]

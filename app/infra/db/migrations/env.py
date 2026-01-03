@@ -9,6 +9,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.models.base import Base, BaseMixin  # noqa
+from app.models.models import User  # noqa
 
 load_dotenv()
 
@@ -17,7 +18,7 @@ load_dotenv()
 config = context.config
 
 # Set sqlalchemy.url using envars
-config.set_main_option("sqlalchemy.url", os.getenv("PROJECT_DATABASE_URL"))
+config.set_main_option("sqlalchemy.url", os.getenv("PROJECT_DB_URL"))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
