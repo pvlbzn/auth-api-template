@@ -51,6 +51,7 @@ def configure_logger(conf: Settings):
             logging.getLogger("httpx").setLevel(logging.WARNING)
             logging.getLogger("httpcore").setLevel(logging.WARNING)
             logging.getLogger("hpack").setLevel(logging.WARNING)
+            logging.getLogger("watchfiles").setLevel(logging.WARNING)
         case "production":
             logging.basicConfig(level=logging.WARNING)
         case _:
