@@ -9,6 +9,7 @@ def run():
         host="0.0.0.0",
         port=settings.APP_PORT,
         reload=True,
+        reload_excludes=[".venv"],
     )
 
 
