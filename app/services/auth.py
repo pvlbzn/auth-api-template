@@ -21,6 +21,7 @@ class AuthService:
         self.log = logging.getLogger(__name__)
         self.oauth = client
         self.initialize_google()
+        self.initialize_github()
 
     def initialize_google(self) -> None:
         self.oauth.register(
@@ -31,6 +32,18 @@ class AuthService:
             client_kwargs={"scope": ["openid email profile"]},
         )
         self.log.debug("Google OAuth initialized")
+
+    def initialize_github(self) -> None:
+        self.oauth.register(
+            name="github",
+            client_id=settings.GITHUB_CLIENT_ID,
+            client_secret=settings.GITHUB_CLIENT_SECRET,
+            access_token_url=settings.GITHUB_ACCESS_TOKEN_URL,
+            authorize_url=settings.GITHUB_AUTHORIZE_URL,
+            api_base_url=settings.GITHUB_API_BASE_URL,
+            client_kwargs={"scope": "user:email"},
+        )
+        self.log.debug("GitHub OAuth initialized")
 
     @staticmethod
     def create_access_token(

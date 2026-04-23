@@ -40,6 +40,13 @@ class Settings(BaseModel):
     GOOGLE_SECRET: str = get_or_throw("GOOGLE_SECRET")
     GOOGLE_METADATA_URL: str = get_or_throw("GOOGLE_METADATA_URL")
 
+    # GitHub OAuth
+    GITHUB_CLIENT_ID: str = get_or_throw("GITHUB_CLIENT_ID")
+    GITHUB_CLIENT_SECRET: str = get_or_throw("GITHUB_CLIENT_SECRET")
+    GITHUB_ACCESS_TOKEN_URL: str = get_or_throw("GITHUB_ACCESS_TOKEN_URL")
+    GITHUB_AUTHORIZE_URL: str = get_or_throw("GITHUB_AUTHORIZE_URL")
+    GITHUB_API_BASE_URL: str = get_or_throw("GITHUB_API_BASE_URL")
+
     # Session
     SESSION_SECRET_KEY: str = get_or_throw("SESSION_SECRET_KEY")
 

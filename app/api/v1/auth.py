@@ -1,7 +1,7 @@
 import logging
 
 import jwt
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
@@ -17,6 +17,7 @@ router = APIRouter()
 log = logging.getLogger(__name__)
 supported_providers = [
     "google",
+    "github",
 ]
 
 
@@ -64,6 +65,23 @@ async def auth_callback(
             name = data.get("name", "")
             provider_id = data.get("sub")
             avatar_url = data.get("picture")
+
+        elif provider == "github":
+            client = auth_service.oauth.create_client(provider)
+            resp = await client.get("user", token=token)
+            data = resp.json()
+            email = data.get("email")
+            name = data.get("name") or data.get("login", "")
+            provider_id = str(data.get("id"))
+            avatar_url = data.get("avatar_url")
+
+            # If there is no email fetch it from emails API.
+            if not email:
+                resp = await client.get("user/emails", token=token)
+                emails = resp.json()
+                primary = next((e for e in emails if e.get("primary")), None)
+                if primary:
+                    email = primary["email"]
 
         user = await user_service.get_or_create(
             email=email,
