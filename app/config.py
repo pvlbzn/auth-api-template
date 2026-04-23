@@ -1,9 +1,10 @@
 import logging
 import os
+
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-load_dotenv()
+load_dotenv(interpolate=True)
 
 
 def get_or_throw(key: str, default: str | None = None, prefix: str = "PROJECT_") -> str:
