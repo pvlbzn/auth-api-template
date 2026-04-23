@@ -32,7 +32,6 @@ async def login(
         )
 
     redirect_url = req.url_for("auth_callback", provider=provider)
-    print("REDIRECT URL:", redirect_url)
 
     return await auth.oauth.create_client(provider).authorize_redirect(
         req, redirect_url
